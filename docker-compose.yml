@@ -2,17 +2,24 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15
-    container_name: repsy-postgres
-    restart: always
+    image: postgres
+    container_name: repsy_postgres
+    read_only: true
     environment:
-      POSTGRES_DB: repsydb
-      POSTGRES_USER: repsyuser
-      POSTGRES_PASSWORD: repsypass
+        - POSTGRES_USER=user
+        - POSTGRES_PASSWORD=user123
+        - POSTGRES_DB=repsyDb
+    expose:
+        - "54322"
     ports:
-      - "15432:5432"
+        - "54322:54322"
+    tmpfs:
+        - /tmp
+        - /run
+        - /run/postgresql
     volumes:
-      - pgdata:/var/lib/postgresql/data
+        - postgres-volume:/var/lib/postgresql/data
+    command: -p 54322
 
   app:
     build: .
@@ -20,11 +27,11 @@ services:
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/repsydb
-      SPRING_DATASOURCE_USERNAME: repsyuser
-      SPRING_DATASOURCE_PASSWORD: repsypass
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:54322/repsyDb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: user123
     ports:
       - "8080:8080"
 
 volumes:
-  pgdata:
+  postgres-volume:

@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: spring
+    url: jdbc:postgresql://localhost:54322/repsyDb
+    username: user
+    password: user123
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,6 +10,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   sql:
     init:
       mode: always
